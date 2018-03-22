@@ -53,7 +53,7 @@ def getSchema():
 
 					"userAgent.ua": { "type": "keyword" },
 
-					"processingDuration": { "type": "int" },
+					"processingDuration": { "type": "integer" },
 
 					"distilFields.distilId": { "type": "keyword" },
 					"distilFields.dZuid": { "type": "keyword" },
