@@ -52,7 +52,7 @@ def parse_diversity(fpath, savepath, schema):
 
 			outfile.write("}")
 
-def parse_file(fpath, save_location, schema, out_file_name):
+def parse_file(fpath, save_location, schema, originalSoftware, originalDevice, getOutFileName):
 	outfiles = VirtualListDict(maxmem=MAXMEM)
 
 	with open(fpath, "r") as inFile:
@@ -100,6 +100,10 @@ def parse_file(fpath, save_location, schema, out_file_name):
 			if not os.path.exists(savingDir):
 				os.makedirs(savingDir)
 
+			software = parsed_props.get(schema["software_field"]) if "software_field" in schema else originalSoftware
+			device = parsed_props.get(schema["device_field"]) if "device_field" in schema else originalDevice
+
+			out_file_name = getOutFileName(software, device)
 			out_filepath = os.path.join(savingDir, out_file_name)
 
 			for prop in parsed_props:

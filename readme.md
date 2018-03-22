@@ -35,12 +35,14 @@ The schema object should be structured as follows:
 		# Each value is a function that takes the raw data as a parameter and returns the value of the scripted field
 		scripted_fields: dict(),
 
+		# The name of the field that holds the actual software of the data
+		# This is useful if data from multiple softwares is present in the same file
+		software_field: str,
+		# Same as 'software_field' but for device
+		device_field: str,
+
 		# The name of the field that holds timestamp data
 		# This is used (and must exist) to direct data into the correct date and hour folder
 		# This is used after parsing all of the data so the field containing the timestamp should already be part of the parsed values
 		timestamp_field: str,
-
-		# optional: The extension to save parsed files with. Should not include "." (dot) as in, "txt" is correct, and not ".txt"
-		# default: nothing
-		out_file_extension: str
 	}
