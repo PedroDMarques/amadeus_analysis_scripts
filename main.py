@@ -4,6 +4,7 @@ import os
 import os.path
 import collections
 import types
+import json
 from os.path import getsize
 from random import randint
 
@@ -136,7 +137,7 @@ def getIndexSchema(name):
 	"""
 	try:
 		schema = importlib.import_module("index_schemas.%s" % name).getSchema()
-		return schema
+		return json.dumps(schema)
 
 	except ImportError:
 		print "Could not find schema for index '%s'. Read readme for more information" % name

@@ -8,7 +8,7 @@ def getSchema():
 		},
 
 		"mappings": {
-			"scappers": {
+			"aere": {
 				"properties": {
 					"timestamp": { "type": "date" },
 					"ipMapLocation": { "type": "geo_point" },
@@ -70,7 +70,7 @@ def getSchema():
 
 					"sessionScores.score": { "type": "double" },
 					"knownViolator": { "type": "boolean" },
-					"exceededThresholdsCount": { "type": "integer" },
+					"exceededThresholdsCount": { "type": "integer" }
 				}
 			}
 		}
