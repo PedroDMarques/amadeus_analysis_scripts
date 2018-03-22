@@ -14,7 +14,7 @@ def getSchema():
 					"arcane_reported": { "type": "boolean" },
 					"distil_reported": { "type": "boolean" },
 
-					"epoch": { "type": "long" },
+					"epoch": { "type": "long", "ignore_malformed": True },
 					"dcxID": { "type": "keyword" },
 					"ipAddress": { "type": "ip" },
 
@@ -31,9 +31,9 @@ def getSchema():
 					"ipMap.city": { "type": "keyword" },
 					"ipMap.regionName": { "type": "keyword" },
 
-					"httpHeaders.bytesSent": { "type": "long" },
+					"httpHeaders.bytesSent": { "type": "long", "ignore_malformed": True },
 					"httpHeaders.httpMethod": { "type": "keyword" },
-					"httpHeaders.contentLength": { "type": "long" },
+					"httpHeaders.contentLength": { "type": "long", "ignore_malformed": True },
 					"httpHeaders.userAgent": { "type": "keyword" },
 					"httpHeaders.httpStatus": { "type": "keyword" },
 					
@@ -66,9 +66,9 @@ def getSchema():
 					"distilFields.xDistilRequestId": { "type": "keyword" },
 					"distilFields.dSid": { "type": "keyword" },
 
-					"sessionScores.score": { "type": "double" },
+					"sessionScores.score": { "type": "double", "ignore_malformed": True },
 					"knownViolator": { "type": "boolean" },
-					"exceededThresholdsCount": { "type": "integer" }
+					"exceededThresholdsCount": { "type": "integer", "ignore_malformed": True }
 				}
 			}
 		}
