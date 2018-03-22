@@ -13,6 +13,8 @@ def parse():
 			"parse-diversity",
 			"collect-stats",
 			"compile-stats", "plot",
+			"es-create", "es-delete",
+			"es-send"
 		]
 	)
 
@@ -51,6 +53,12 @@ def parse():
 		dest="maxsize",
 		type=int,
 		help="--max-size help"
+	)
+
+	parser.add_argument(
+		"--es-index",
+		dest="es_index",
+		help="--es-index help"
 	)
 
 	## Compile arguments

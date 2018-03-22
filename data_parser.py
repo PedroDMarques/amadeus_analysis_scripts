@@ -63,6 +63,10 @@ def parse_file(fpath, save_location, schema, originalSoftware, originalDevice, g
 			raw_props = json_loads(line)
 			parsed_props = dict()
 
+			if "skip" in schema:
+				if schema["skip"](raw_props):
+					continue
+
 			# Copy fields from raw data except the ones to ignore
 			for field in raw_props:
 				if field not in schema.get("ignore_fields", []):

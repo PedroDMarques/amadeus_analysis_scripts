@@ -7,6 +7,16 @@ import types
 from os.path import getsize
 from random import randint
 
+global es
+try:
+	import elasticsearch
+	import elasticsearch.helpers
+	from elasticsearch import Elasticsearch
+	global es
+	es = Elasticsearch(timeout=300)
+except:
+	pass
+
 from print_util import colorLog
 from utils import toFilename, fromFilename
 
@@ -37,6 +47,33 @@ LOCATION_COLLECT_STATS = "stats"
 COMMITNAME_COLLECT_DIVERSITY = "meta-commit-collected-diversity"
 LOCATION_COLLECT_DIVERSITY = "diversity"
 
+def esCreateIndex(args, config):
+	"""
+	Create elasticsearch index
+	"""
+	global es
+
+	if not args.es_index:
+		print colorLog("danger", "--es-index was not specified")
+		exit(-1)
+
+	index = args.es_index
+	schema = getIndexSchema(index)
+	es.indices.create(index=index, body=schema)
+
+def esDeleteIndex(args, config):
+	"""
+	Delete elasticsearch index
+	"""
+	global es
+
+	if not args.es_index:
+		print colorLog("danger", "--es-index was not specified")
+		exit(-1)
+	
+	index = args.es_index
+	es.indices.delete(index=index, ignore=[400, 404])
+
 def createlocation(location):
 	"""
 	Creates a location if it does not already exist
@@ -48,6 +85,27 @@ def createlocation(location):
 
 	elif not os.path.exists(location):
 		os.makedirs(location)
+
+def getIndexSchema(name):
+	"""
+	Get the dictionary used to create an elasticsearch index
+	Parameters:
+		{str} name The name of the index to get
+	Returns:
+		{dict} The index options
+	"""
+	try:
+		schema = importlib.import_module("index_schemas.%s" % name).getSchema()
+		return schema
+
+	except ImportError:
+		print "Could not find schema for index '%s'. Read readme for more information" % name
+		exit(-1)
+	
+	except AttributeError:
+		print "Schema module for index '%s' does not expose a 'getSchema' function. Read readme for more information" % name
+		exit(-1)
+
 
 def getschema(schema_type, software, device):
 	"""
@@ -77,11 +135,11 @@ def getschema(schema_type, software, device):
 		return schema
 	
 	except ImportError:
-		print "Could not find parsing schema for software '%s'. Read readme for more information" % software
+		print "Could not find schema for software '%s'. Read readme for more information" % software
 		exit(-1)
 	
 	except AttributeError:
-		print "Parsing schema module for software '%s' does not expose a 'getSchema' function. Read readme for more information" % software
+		print "Schema module for software '%s' does not expose a 'getSchema' function. Read readme for more information" % software
 		exit(-1)
 
 def install(args):
