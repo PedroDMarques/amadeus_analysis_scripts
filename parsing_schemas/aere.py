@@ -5,7 +5,7 @@ import pytz
 def getSoftware(raw, parsed):
 	if "distilFields" in raw:
 		return "distil"
-	else if any(x in raw for x in ["sessionScores", "exceededThresholds", "knownViolator", "exceededThresholdsCount"]):
+	elif any(x in raw for x in ["sessionScores", "exceededThresholds", "knownViolator", "exceededThresholdsCount"]):
 		return "arcane"
 	else:
 		return "unknown"
