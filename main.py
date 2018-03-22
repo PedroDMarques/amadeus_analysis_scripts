@@ -135,12 +135,12 @@ def parse(args, config):
 		startTime = time.time()
 
 		schema = getschema("parsing", software, device)
-		data_parser.parse_file(fpath, savelocation, schema
+		data_parser.parse_file(fpath, savelocation, schema,
 			originalSoftware=software,
 			originalDevice=device,
 			getOutFileName=(lambda s,d: "%s-%s" % (software, device))
 		)
-		
+
 		elapsed_seconds = time.time() - startTime
 		print colorLog("info", "Finished parsing. Took %s" % round(elapsed_seconds, 3))
 		timetracker.update(elapsed_seconds, size)
