@@ -7,16 +7,6 @@ import types
 from os.path import getsize
 from random import randint
 
-global es
-try:
-	import elasticsearch
-	import elasticsearch.helpers
-	from elasticsearch import Elasticsearch
-	global es
-	es = Elasticsearch(timeout=300)
-except:
-	pass
-
 from print_util import colorLog
 from utils import toFilename, fromFilename
 
@@ -27,6 +17,7 @@ import file_commit
 import data_parser
 import data_collector
 import data_compiler
+import es_handler
 from timetracker import Timetracker
 
 REQUIRED_SCHEMA_PROPERTIES = {
@@ -47,19 +38,17 @@ LOCATION_COLLECT_STATS = "stats"
 COMMITNAME_COLLECT_DIVERSITY = "meta-commit-collected-diversity"
 LOCATION_COLLECT_DIVERSITY = "diversity"
 
+COMMITNAME_ES_SEND = "meta-commit-es-send"
+
 def esCreateIndex(args, config):
 	"""
 	Create elasticsearch index
 	"""
 	global es
 
-	if not args.es_index:
-		print colorLog("danger", "--es-index was not specified")
-		exit(-1)
-
-	index = args.es_index
+	index = config["es_index"]
 	schema = getIndexSchema(index)
-	es.indices.create(index=index, body=schema)
+	es_handler.createIndex(index, schema)
 
 def esDeleteIndex(args, config):
 	"""
@@ -67,12 +56,63 @@ def esDeleteIndex(args, config):
 	"""
 	global es
 
-	if not args.es_index:
-		print colorLog("danger", "--es-index was not specified")
-		exit(-1)
+	index = config["es_index"]
+	es_handler.deleteIndex(index)
 	
-	index = args.es_index
-	es.indices.delete(index=index, ignore=[400, 404])
+
+def esSend(args, config):
+	"""
+	Send parsed data to elasticsearch
+	"""
+	global es
+
+	index = config["es_index"]
+	timetracker = Timetracker()
+	parsedlocation = os.path.join(config["parsed_data_location"], LOCATION_PARSE)
+	commit_filepath = os.path.join(config["parsed_data_location"], COMMITNAME_ES_SEND)
+
+	data, filtered = file_agg.get_parsed_data_files(parsedlocation,
+		ignore_software=config["ignore_software"],
+		ignore_device=config["ignore_device"],
+		minsize=args.minsize,
+		maxsize=args.maxsize
+	)
+
+	if args.verbose > 0:
+		for fpath, reason in filtered:
+			print colorLog("danger", "%s | Filtered based on %s" % (fpath, reason))
+
+		for _, _, _, fpath in data:
+			print colorLog("info", "%s | Ready for sending" % fpath)
+
+	print colorLog("info-2", "%d data files filtered" % len(filtered))
+	print colorLog("info-2", "%d data files ready for sending" % len(data))
+	print colorLog("info-2", "Starting elasticsearch sending process")
+
+	for hour, software, device, fpath in data:
+		# Fail if the file was already parsed and the user is not forcing it
+		if file_commit.isCommitted(commit_filepath, fpath) and not args.force:
+			print colorLog("danger", "Did not send %s because it has already been sent before" % fpath)
+			continue
+
+		size = getsize(fpath)
+		print colorLog("info", "Sending %s %s" % (fpath, "[%d bytes]" % size if args.verbose > 0 else ""))
+		print colorLog("info", "Estimated to take %d seconds to complete" % timetracker.estimate(size))
+		startTime = time.time()
+
+		with open(fpath, "r") as fh:
+			try:
+				es_handler.sendFile(index, fh)
+			except es_handler.TimeoutError:
+				print colorLog("danger", "Timeout error occurred. Continuing...")
+
+		elapsed_seconds = time.time() - startTime
+		print colorLog("info", "Finished sending. Took %s" % round(elapsed_seconds, 3))
+		timetracker.update(elapsed_seconds, size)
+
+		# Commit if we haven't commited it before (might have committed it before with -f)
+		if not file_commit.isCommitted(commit_filepath, fpath):
+			file_commit.commit(commit_filepath, fpath)
 
 def createlocation(location):
 	"""

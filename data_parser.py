@@ -69,7 +69,7 @@ def parse_file(fpath, save_location, schema, originalSoftware, originalDevice, g
 
 			# Copy fields from raw data except the ones to ignore
 			for field in raw_props:
-				if field not in schema.get("ignore_fields", []):
+				if field not in schema.get("ignore_fields", list()):
 					parsed_props[field] = raw_props[field]
 
 			# Parse fields specified
@@ -109,13 +109,6 @@ def parse_file(fpath, save_location, schema, originalSoftware, originalDevice, g
 
 			out_file_name = getOutFileName(software, device)
 			out_filepath = os.path.join(savingDir, out_file_name)
-
-			for prop in parsed_props:
-				if not isinstance(parsed_props[prop], collections.Hashable):
-					try:
-						parsed_props[prop] = tuple(parsed_props[prop])
-					except:
-						raise ParsingError("Could not correctly parse %d in line %s" % (prop, line))
 
 			saveline = "%s\n" % json.dumps(parsed_props)
 			outfiles.append(out_filepath, saveline)

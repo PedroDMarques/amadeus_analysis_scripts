@@ -19,6 +19,12 @@ OPTIONS = {
 		"read": (lambda x: x)
 	},
 
+	"es_index": {
+		"description": "Elasticsearch index description",
+		"default": "es-index",
+		"read": (lambda x: x)
+	},
+
 	"ignore_software": {
 		"description": "Ignore software description",
 		"default": "",
@@ -46,6 +52,7 @@ OPTIONS = {
 
 OPTIONS_ORDER = [
 	"raw_data_location", "parsed_data_location", "collected_data_location",
+	"es_index",
 	"ignore_software", "ignore_device", "ignore_file_name", "ignore_file_ext"
 ]
 
