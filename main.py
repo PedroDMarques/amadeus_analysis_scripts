@@ -138,7 +138,7 @@ def parse(args, config):
 		data_parser.parse_file(fpath, savelocation, schema,
 			originalSoftware=software,
 			originalDevice=device,
-			getOutFileName=(lambda s,d: "%s-%s" % (software, device))
+			getOutFileName=(lambda s,d: "%s-%s" % (s, d))
 		)
 
 		elapsed_seconds = time.time() - startTime

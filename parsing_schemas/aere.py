@@ -19,7 +19,7 @@ def getSchema(software, device):
 			},
 			"parse": {
 				## / 1e3 because it's coming from javascript so it includes milliseconds
-				"timestamp": (lambda x: datetime.datetime.utcfromtimestamp(float(x) / 1e3))
+				"timestamp": (lambda x: datetime.datetime.utcfromtimestamp(float(x) / 1e3).replace(tzinfo=pytz.utc).isoformat())
 			}
 		},
 
