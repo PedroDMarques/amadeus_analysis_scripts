@@ -41,9 +41,9 @@ def createIndex(index, schema):
 def deleteIndex(index):
 	es.indices.delete(index=index, ignore=[400, 404])
 
-def sendFile(index, fh)
+def sendFile(index, fh):
 	try:
 		for ok, item in elasticsearch.helpers.streaming_bulk(es, BulkIterator(fh, index)):
 			pass
 	except elasticsearch.exceptions.ConnectionTimeout:
-		raise TimeoutError
+		raise TimeoutError("timeout")
