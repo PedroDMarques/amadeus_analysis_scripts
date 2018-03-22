@@ -1,5 +1,3 @@
-import json
-
 def getSchema():
 	return {
 		"settings": {
@@ -43,7 +41,7 @@ def getSchema():
 					"httpRequest.hostname": { "type": "keyword" },
 					"httpRequest.port": { "type": "keyword" },
 					"httpRequest.path": { "type": "text" },
-					"httpRequest.uri": { "type", "keyword" },
+					"httpRequest.uri": { "type": "keyword" },
 					"httpRequest.parseFailure": { "type": "boolean" },
 					
 					"httpReferer.protocol": { "type": "keyword" },
