@@ -463,3 +463,6 @@ if __name__ == "__main__":
 		elif args.action == "collect-stats": collect_stats(args, config)
 		elif args.action == "collect-diversity": collect_diversity(args, config)
 		elif args.action == "compile-stats": compile_stats(args, config)
+		elif args.action == "es-create": esCreateIndex(args, config)
+		elif args.action == "es-delete": esDeleteIndex(args, config)
+		elif args.action == "es-send": esSend(args, config)
