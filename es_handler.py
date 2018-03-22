@@ -1,4 +1,5 @@
 from jsonutil import json_loads_byteified
+import json
 
 global es
 try:
@@ -32,7 +33,7 @@ class BulkIterator:
 				"_op_type": "index",
 				"_index": self.index,
 				"_type": self.index,
-				"_source": json_loads_byteified(line)
+				"_source": json.loads(line)
 			}
 
 def createIndex(index, schema):
