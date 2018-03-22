@@ -72,7 +72,7 @@ def getSchema(software, device):
 			"arcane_reported": arcane_reported,
 			"distil_reported": distil_reported,
 			"ipMapLocation": getLocation,
-		}
+		},
 
 		"timestamp_field": "timestamp",
 	}
