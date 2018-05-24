@@ -10,13 +10,16 @@ class Timetracker():
 		self.trackings += 1
 
 	def estimate(self, size):
-		if size == 0:
+		try:
+			if size == 0:
+				return -1
+
+			if self.trackings == 0:
+				return -1
+
+			avgTime = self.sum_times / self.trackings
+			avgSize = self.sum_sizes / self.trackings
+
+			return (avgTime/avgSize) * size
+		except ZeroDivisionError:
 			return -1
-
-		if self.trackings == 0:
-			return -1
-
-		avgTime = self.sum_times / self.trackings
-		avgSize = self.sum_sizes / self.trackings
-
-		return (avgTime/avgSize) * size
