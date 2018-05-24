@@ -13,8 +13,12 @@ def getSchema():
 					"timestamp": { "type": "date" },
 					"ipMapLocation": { "type": "geo_point" },
 
-					"arcane_reported": { "type": "boolean" },
-					"distil_reported": { "type": "boolean" },
+					"distil_label": { "type": "boolean" },
+					"arcane_label": { "type": "boolean" },
+					"manual_label": { "type": "boolean" },
+
+					#"arcane_reported": { "type": "boolean" },
+					#"distil_reported": { "type": "boolean" },
 
 					"epoch": { "type": "long" },
 					"dcxID": { "type": "keyword" },

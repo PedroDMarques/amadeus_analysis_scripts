@@ -69,8 +69,8 @@ def getSchema(software, device):
 		},
 
 		"scripted_fields": {
-			"arcane_reported": arcane_reported,
-			"distil_reported": distil_reported,
+			#"arcane_reported": arcane_reported,
+			#"distil_reported": distil_reported,
 			"ipMapLocation": getLocation,
 		},
 
