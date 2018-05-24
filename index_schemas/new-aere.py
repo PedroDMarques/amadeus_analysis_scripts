@@ -5,6 +5,7 @@ def getSchema():
 			"number_of_replicas": 1,
 
 			"index.mapping.ignore_malformed": True,
+			"index.mapping.total_fields.limit": 10000,
 		},
 
 		"mappings": {
