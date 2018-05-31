@@ -47,12 +47,19 @@ OPTIONS = {
 		"description": "Ignore file ext description",
 		"default": "zip,gz",
 		"read": (lambda x: x.split(","))
+	},
+
+	"es-pipeline": {
+		"description": "The name of a pipeline to use when sending data to elasticsearch. The pipeline should exist in elasticsearch",
+		"default": "",
+		"read": (lambda x: x)
 	}
 }
 
 OPTIONS_ORDER = [
 	"raw_data_location", "parsed_data_location", "collected_data_location",
 	"es_index",
+	"es-pipeline",
 	"ignore_software", "ignore_device", "ignore_file_name", "ignore_file_ext"
 ]
 

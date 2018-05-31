@@ -15,9 +15,10 @@ class TimeoutError(ValueError):
 	pass
 
 class BulkIterator:
-	def __init__(self, fh, index):
+	def __init__(self, fh, index, pipeline):
 		self.fh = fh
 		self.index = index
+		self.pipeline = pipeline
 
 	def __iter__(self):
 		return self
@@ -31,6 +32,7 @@ class BulkIterator:
 		else:
 			return {
 				"_op_type": "index",
+				"pipeline": self.pipeline if self.pipeline else None,
 				"_index": self.index,
 				"_type": self.index,
 				"_source": json.loads(line)
@@ -42,9 +44,9 @@ def createIndex(index, schema):
 def deleteIndex(index):
 	es.indices.delete(index=index, ignore=[400, 404])
 
-def sendFile(index, fh):
+def sendFile(index, fh, pipeline=None):
 	try:
-		for ok, item in elasticsearch.helpers.streaming_bulk(es, BulkIterator(fh, index)):
+		for ok, item in elasticsearch.helpers.streaming_bulk(es, BulkIterator(fh, index, pipeline)):
 			pass
 	except elasticsearch.exceptions.ConnectionTimeout:
 		raise TimeoutError("timeout")

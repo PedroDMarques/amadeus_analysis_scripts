@@ -103,7 +103,7 @@ def esSend(args, config):
 
 		with open(fpath, "r") as fh:
 			try:
-				es_handler.sendFile(index, fh)
+				es_handler.sendFile(index, fh, config["es-pipeline"])
 			except es_handler.TimeoutError:
 				print colorLog("danger", "Timeout error occurred. Continuing...")
 
