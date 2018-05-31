@@ -14,6 +14,16 @@ def getSchema():
 					"timestamp": { "type": "date" },
 					"ipMapLocation": { "type": "geo_point" },
 
+					"geoip" : {
+						"dynamic": True,
+						"properties" : {
+							"ip": { "type": "ip" },
+							"location" : { "type" : "geo_point" },
+							"latitude" : { "type" : "half_float" },
+							"longitude" : { "type" : "half_float" }
+						},
+					},
+
 					"distil_label": { "type": "boolean" },
 					"arcane_label": { "type": "boolean" },
 					"manual_label": { "type": "boolean" },
