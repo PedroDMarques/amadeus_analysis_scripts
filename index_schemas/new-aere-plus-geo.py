@@ -9,7 +9,7 @@ def getSchema():
 		},
 
 		"mappings": {
-			"new-aere-plus": {
+			"new-aere-plus-geo": {
 				"properties": {
 					"timestamp": { "type": "date" },
 					"ipMapLocation": { "type": "geo_point" },
